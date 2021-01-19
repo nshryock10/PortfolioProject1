@@ -1,5 +1,5 @@
-# Random Madlib Generator
-## JavaScript Portfolio Project
+#Random Madlib Generator
+##JavaScript Portfolio Project
 
 Simple program run on command line that generates a random mad lib.
 
