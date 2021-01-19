@@ -9,7 +9,7 @@ const messages = {
     sentences: ['Yesterday I ate *noun* while I was *verb*ing in my *adjective* outfit!',
     'It is very *adjective* out today. I think I will *verb* with *noun*.',
     'I am writing a story about a *adjective* *noun* that can *verb* in space!'],
-    nouns: ['dog', 'friend', 'banana', 'umbrella', 'tree', 'pizza', 'shoe', 'watch', 'mouse'],
+    nouns: ['dog', 'friend', 'banana', 'umbrella', 'tree', 'pizza', 'shoe', 'taco', 'mouse'],
     verbs: ['run', 'bike', 'sing', 'shout', 'crawl', 'walk', 'drive', 'climb', 'hike', 'surf'],
     adjectives: ['funny', 'hyper', 'colorful', 'happy', 'enormous', 'jolly', 'plump', 'mysterious', 'adventurous', 'shaggy'],
     findIndex(sentence) {
@@ -32,15 +32,60 @@ const messages = {
         //Returns the new word object
         return newWord;
     },
-    replaceWord(wordObj, word){
+    replaceWord(sentence, wordObj, word, type){
         //This method will replace the placeholder with the chosen word
+        
+        //Find the appropriate index start based on the type
+        let sIndex = 0;
+        let eIndex = 0;
+        switch (type){
+            case 'noun':
+                sIndex = wordObj.nounIdex;
+                eIndex = 6;
+                break;
+            case 'verb':
+                sIndex = wordObj.verbIndex;
+                eIndex = 6;
+                break;
+            case 'adjective':
+                sIndex = word.adjecIndex;
+                eIndex = 11;
+                break;
+            default:
+                sIndex = 'Error';
+                break;
+        }
 
+        //Repalce the word in the sentnece using the start and end index from above
+        let newSent = sentence.replace('*' + type + '*', word);
+        return newSent;
     },
     randomWord(type){
         //This method will generate a random word base on the type passed in
+        const word = this[type][Math.floor(Math.random() * this[type].length)];
+        return word;
     },
     generateMessage(){
         //This function will be put together the full sentence
+        
+        //Pull a random sentence
+        const sent = this.randomWord('sentences');
+        //Find index of each word in that sentence
+        const wordIndex = this.findIndex(sent);
+        //Pull a random noun and add to sentence
+        const noun = this.randomWord('nouns');
+        let newSent = this.replaceWord(sent, wordIndex, noun, 'noun');
+        console.log(newSent);
+        //Pull a random verb and add to sentence
+        const verb = this.randomWord('verbs');
+        newSent = this.replaceWord(newSent, wordIndex, verb, 'verb');
+        console.log(newSent);
+        //Pull a random adjective and add to sentence
+        const adjective = this.randomWord('adjectives');
+        newSent = this.replaceWord(newSent, wordIndex, adjective, 'adjective');
+        
+        //Print out the message
+        console.log(newSent);
     }
 }
 
@@ -48,6 +93,4 @@ const messages = {
 
 //Call the randomMessgaeGenerator function and print to the screen
 
-let randSent = messages.sentences[Math.floor(Math.random() * messages.sentences.length)];
-console.log(randSent);
-console.log(messages.findIndex(randSent));
+messages.generateMessage();
